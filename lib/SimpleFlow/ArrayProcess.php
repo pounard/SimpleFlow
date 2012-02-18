@@ -46,14 +46,6 @@ class ArrayProcess extends AbstractElement implements WritableProcess
         return $this->activities;
     }
 
-    /**
-     * Get event for transition
-     * @param scalar|Activity $from Activity object or key
-     * @param scalar|Activity $to Activity object or key
-     * @throws ElementNotFoundException If one of the activities does not exist
-     * @throws TransitionNotAllowedException If the transition is not allowed
-     * @return BpmnFlow\Event\Event
-     */
     public function getEvent($from, $to)
     {
         if (!$this->canTransition($from, $to)) {
@@ -76,14 +68,6 @@ class ArrayProcess extends AbstractElement implements WritableProcess
         return $event;
     }
 
-    /**
-      * Does this process can proceed to the change from given activity to given
-      * activity
-      * @param scalar|Activity $from Activity object or key
-      * @param scalar|Activity $to Activity object or key
-      * @return bool
-      * @throws ElementNotFoundException If one of the activities does not exist
-      */
     public function canTransition($from, $to)
     {
         if ($from instanceof Activity) {
@@ -103,15 +87,6 @@ class ArrayProcess extends AbstractElement implements WritableProcess
         return isset($this->activitySparseMatrix[$from][$to]);
     }
 
-    /**
-     * Run transition from the given activity to the given activity: any
-     * attached listeners or event will be run
-     * @param scalar|Activity $from Activity object or key
-     * @param scalar|Activity $to Activity object or key
-     * @throws ElementNotFoundException If one of the activities does not exist
-     * @throws TransitionNotAllowedException If the transition is not allowed
-     * @return bool False if a listener canceled the transition true else
-     */
     public function runTransition($from, $to)
     {
         if (!$this->canTransition($from, $to)) {

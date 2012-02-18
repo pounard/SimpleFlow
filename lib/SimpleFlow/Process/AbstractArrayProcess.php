@@ -2,13 +2,12 @@
 
 namespace SimpleFlow\Process;
 
-use SimpleFlow\Transition\Transition;
-
 use SimpleFlow\AbstractElement;
 use SimpleFlow\Activity\Activity;
 use SimpleFlow\ElementNotFoundException;
 use SimpleFlow\Event\Event;
 use SimpleFlow\Transition\DefaultTransition;
+use SimpleFlow\Transition\Transition;
 
 /**
  * In memory read-only process implementation based upon straight-forward PHP
@@ -77,12 +76,6 @@ abstract class AbstractArrayProcess extends AbstractElement implements Process
         return $this;
     }
 
-    /**
-     * Get possible transitions from the given activity
-     * @param scalar|Activity $from Activity object or key
-     * @return array Array of Activity instances, can be empty
-     * @throws ElementNotFoundException
-     */
     public function getTransitionsFrom($from)
     {
         if ($from instanceof Activity) {

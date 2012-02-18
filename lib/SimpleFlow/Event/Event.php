@@ -18,7 +18,7 @@ interface Event
 
     /**
      * Stop event propagation to further events
-     * @return EventInstance Chaining self reference
+     * @return Event Chaining self reference
      */
     public function stopPropagation();
 
@@ -26,7 +26,7 @@ interface Event
      * Cancel transition phase and avoid the process to advance to next
      * activity or end event, it will also stop propagation to further
      * events
-     * @return EventInstance Chaining self reference
+     * @return Event Chaining self reference
      */
     public function cancelTransition();
 

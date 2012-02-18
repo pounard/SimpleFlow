@@ -13,16 +13,16 @@ interface Transition extends Element
     public function getListeners();
 
     /**
-     * Add listener to this event. They will receive the raised EventInstance
+     * Add listener to this event. They will receive the raised Event
      * at call time as first parameter
      * @param callable $listener
-     * @return Event Chaining self reference
+     * @return Transition Chaining self reference
      */
     public function addListener($listener);
 
     /**
      * Create new event instance and run it over all listeners
-     * @return EventInstance Run event instance
+     * @return Event Run event instance
      */
     public function run();
 }

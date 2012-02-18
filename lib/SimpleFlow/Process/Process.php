@@ -4,13 +4,10 @@ namespace SimpleFlow\Process;
 
 use SimpleFlow\Activity\Activity;
 use SimpleFlow\Element;
-use SimpleFlow\Event\Event;
+use SimpleFlow\Transition\Transition;
 
 /**
  * Read-only simple finite state machine process interface
- *
- * This simple implementation is Transition-less, only events will be attached
- * to the activity matrix, one per possible transition
  */
 interface Process extends Element
 {
@@ -30,17 +27,17 @@ interface Process extends Element
     public function getActivities();
 
     /**
-     * Get event at the given transition
+     * Get transition
      * @param scalar|Activity $from Activity object or key
      * @param scalar|Activity $to Activity object or key
-     * @return Event
+     * @return Transition
      * @throws ElementNotFoundException
      * @throws TransitionNotAllowedException
      */
-    public function getEvent($from, $to);
+    public function getTransition($from, $to);
 
     /**
-     * Alias for Process::getEvent()::addListener()
+     * Alias for Process::getTransition()::addListener()
      * @param scalar|Activity $from Activity object or key
      * @param scalar|Activity $to Activity object or key
      * @param callable $listener
@@ -49,6 +46,14 @@ interface Process extends Element
      * @throws TransitionNotAllowedException
      */
     public function addListener($from, $to, $listener);
+
+    /**
+     * Get possible transitions from the given activity
+     * @param scalar|Activity $from Activity object or key
+     * @return array Array of Activity instances, can be empty
+     * @throws ElementNotFoundException
+     */
+    public function getTransitionsFrom($from);
 
     /**
      * Does this process can proceed to the change from given activity to given
@@ -62,7 +67,7 @@ interface Process extends Element
 
     /**
      * Run transition from the given activity to the given activity: any
-     * attached listeners or event will be run
+     * attached listeners or transition will be run
      * @param scalar|Activity $from Activity object or key
      * @param scalar|Activity $to Activity object or key
      * @throws ElementNotFoundException If one of the activities does not exist

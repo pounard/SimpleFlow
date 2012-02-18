@@ -2,90 +2,69 @@
 
 namespace SimpleFlow\Event;
 
-use SimpleFlow\AbstractElement;
-use SimpleFlow\ElementNotFoundException;
 use SimpleFlow\Transition\Transition;
 
 /**
- * Default in memory event implementation
- *
- * FIXME: Add listener prioritizing
+ * Default in memory implementation
  */
-class DefaultEvent extends AbstractElement implements Event
+class DefaultEvent implements Event
 {
-    /**
-     * @var bool
-     */
-    protected $isStart = false;
-
-    /**
-     * @var bool
-     */
-    protected $isFinal = false;
-
     /**
      * @var Transition
      */
     protected $transition;
 
     /**
-     * @var array
+     * @var bool
      */
-    protected $listeners = array();
+    protected $run = false;
 
-    public function isStart()
-    {
-        return $this->isStart;
-    }
+    /**
+     * @var bool
+     */
+    protected $stopped = false;
 
-    public function isFinal()
-    {
-        return $this->isFinal;
-    }
-
-    public function isIntermediate()
-    {
-        return !($this->isStart || $this->isFinal);
-    }
+    /**
+     * @var bool
+     */
+    protected $canceled = false;
 
     public function getTransition()
     {
-        if (!isset($this->transition)) {
-            throw new ElementNotFoundException();
-        }
-
-        return $transition;
+        return $this->transition;
     }
 
-    public function getListeners()
+    public function stopPropagation()
     {
-        return $this->listeners;
-    }
-
-    public function addListener($listener)
-    {
-        if (!is_callable($listener)) {
-            throw new \InvalidArgumentException("Argument is not a valid callable instance");
-        }
-
-        $this->listeners[] = $listener;
+        $this->stopped = true;
 
         return $this;
     }
 
-    public function run()
+    public function cancelTransition()
     {
-        $eventInstance = new DefaultEventInstance($this);
+        $this->canceled = true;
 
-        foreach ($this->listeners as $listener) {
+        return $this;
+    }
 
-            $listener($eventInstance);
+    public function hasRun()
+    {
+        return $this->run;
+    }
 
-            if ($eventInstance->hasBeenStopped()) {
-                break;
-            }
-        }
+    public function hasBeenStopped()
+    {
+        return $this->stopped;
+    }
 
-        return $eventInstance;
+    public function hasBeenCanceled()
+    {
+        return $this->canceled;
+    }
+
+    public function __construct(Transition $transition)
+    {
+        $this->transition = $transition;
     }
 }

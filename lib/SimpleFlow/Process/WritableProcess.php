@@ -5,7 +5,7 @@ namespace SimpleFlow\Process;
 use SimpleFlow\Activity\Activity;
 use SimpleFlow\ElementAlreadyExistsException;
 use SimpleFlow\ElementNotFoundException;
-use SimpleFlow\Event\Event;
+use SimpleFlow\Transition\Transition;
 
 /**
  * Writable finite state machine process interface.
@@ -36,16 +36,16 @@ interface WritableProcess extends Process
      * activity with the same key already exists
      * @throws ProcessLockedException If process is locked
      */
-    public function addActivity(Activity $activity, $replace = false);
+    public function addActivity($key, $name, $replace = false);
 
     /**
      * Add a new transition
      * @param scalar|Activity $from Activity object or key
      * @param scalar|Activity $to Activity object or key
-     * @param Event $event
+     * @param Transition $transition
      * @return WritableProcess Chaining self reference
      * @throws ElementAlreadyExistsException If transition already exists
      * @throws ProcessLockedException If process is locked
      */
-    public function setTransition($from, $to, Event $event = null);
+    public function setTransition($from, $to, Transition $transition = null);
 }

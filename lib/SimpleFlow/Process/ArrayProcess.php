@@ -4,10 +4,10 @@ namespace SimpleFlow\Process;
 
 use SimpleFlow\AbstractElement;
 use SimpleFlow\Activity\Activity;
+use SimpleFlow\Activity\DefaultActivity;
 use SimpleFlow\ElementAlreadyExistsException;
 use SimpleFlow\ElementNotFoundException;
-use SimpleFlow\Event\DefaultEvent;
-use SimpleFlow\Event\Event;
+use SimpleFlow\Transition\Transition;
 
 /**
  * In memory read-write process implementation based upon straight-forward PHP
@@ -27,24 +27,22 @@ class ArrayProcess extends AbstractArrayProcess implements WritableProcess
         return $this;
     }
 
-    public function addActivity(Activity $activity, $replace = false)
+    public function addActivity($key, $name = null, $replace = false)
     {
         if ($this->isLocked()) {
             throw new ProcessLockedException($this);
         }
 
-        $key = $activity->getKey();
-
         if (!$replace && isset($this->activities[$key])) {
             throw new ElementAlreadyExistsException($this->activities[$key], $activity, $this);
         }
 
-        $this->activities[$key] = $activity;
+        $this->activities[$key] = new DefaultActivity($key, $name);
 
         return $this;
     }
 
-    public function setTransition($from, $to, Event $event = null)
+    public function setTransition($from, $to, Transition $transition = null)
     {
         if ($this->isLocked()) {
             throw new ProcessLockedException($this);
@@ -61,11 +59,11 @@ class ArrayProcess extends AbstractArrayProcess implements WritableProcess
             $to = $to->getKey();
         }
 
-        if (!isset($event)) {
-            $event = true;
+        if (!isset($transition)) {
+            $transition = true;
         }
 
-        $this->activitySparseMatrix[$from][$to] = $event;
+        $this->activitySparseMatrix[$from][$to] = $transition;
 
         return $this;
     }

@@ -2,11 +2,13 @@
 
 namespace SimpleFlow\Process;
 
+use SimpleFlow\Transition\Transition;
+
 use SimpleFlow\AbstractElement;
 use SimpleFlow\Activity\Activity;
 use SimpleFlow\ElementNotFoundException;
-use SimpleFlow\Event\DefaultEvent;
 use SimpleFlow\Event\Event;
+use SimpleFlow\Transition\DefaultTransition;
 
 /**
  * In memory read-only process implementation based upon straight-forward PHP
@@ -45,7 +47,7 @@ abstract class AbstractArrayProcess extends AbstractElement implements Process
         return $this->activities;
     }
 
-    public function getEvent($from, $to)
+    public function getTransition($from, $to)
     {
         if (!$this->canTransition($from, $to)) {
             throw new TransitionNotAllowedException($from, $to, $this);
@@ -58,20 +60,48 @@ abstract class AbstractArrayProcess extends AbstractElement implements Process
             $to = $to->getKey();
         }
 
-        $event = $this->activitySparseMatrix[$from][$to];
+        $transition = $this->activitySparseMatrix[$from][$to];
 
-        if (!$event instanceof Event) {
-            $event = $this->activitySparseMatrix[$from][$to] = new DefaultEvent($from . '->' . $to);
+        if (!$transition instanceof Transition) {
+            $key = $from . '-' . $to;
+            $transition = $this->activitySparseMatrix[$from][$to] = new DefaultTransition($key);
         }
 
-        return $event;
+        return $transition;
     }
 
     public function addListener($from, $to, $listener)
     {
-        $this->getEvent($from, $to)->addListener($listener);
+        $this->getTransition($from, $to)->addListener($listener);
 
         return $this;
+    }
+
+    /**
+     * Get possible transitions from the given activity
+     * @param scalar|Activity $from Activity object or key
+     * @return array Array of Activity instances, can be empty
+     * @throws ElementNotFoundException
+     */
+    public function getTransitionsFrom($from)
+    {
+        if ($from instanceof Activity) {
+            $from = $from->getKey();
+        }
+
+        if (!isset($this->activities[$from])) {
+            throw new ElementNotFoundException($from, $this);
+        }
+
+        $ret = array();
+
+        if (isset($this->activitySparseMatrix[$from])) {
+            foreach ($this->activitySparseMatrix[$from] as $to => $transition) {
+                $ret[] = '';
+            }
+        }
+
+        return $ret;
     }
 
     public function canTransition($from, $to)
@@ -106,13 +136,13 @@ abstract class AbstractArrayProcess extends AbstractElement implements Process
             $to = $to->getKey();
         }
 
-        $event = $this->activitySparseMatrix[$from][$to];
+        $transition = $this->activitySparseMatrix[$from][$to];
 
-        if ($event instanceof Event) {
+        if ($transition instanceof Transition) {
 
-            $eventInstance = $event->run();
+            $event = $transition->run();
 
-            if ($eventInstance->hasBeenCanceled()) {
+            if ($event->hasBeenCanceled()) {
                 return false;
             }
         }

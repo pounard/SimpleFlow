@@ -5,7 +5,7 @@
  */
 
 use SimpleFlow\Activity\DefaultActivity;
-use SimpleFlow\Event\EventInstance;
+use SimpleFlow\Event\Event;
 use SimpleFlow\Process\ArrayProcess;
 use SimpleFlow\Process\LazyArrayProcess;
 use SimpleFlow\Process\TransitionNotAllowedException;
@@ -27,28 +27,28 @@ echo "ArrayProcess base implementation usage:\n";
 $process = new ArrayProcess("sample-process", "Sample process");
 
 $process
-    ->addActivity(new DefaultActivity('a'))
-    ->addActivity(new DefaultActivity('b'))
-    ->addActivity(new DefaultActivity('c'))
-    ->addActivity(new DefaultActivity('d'))
+    ->addActivity('a')
+    ->addActivity('b')
+    ->addActivity('c')
+    ->addActivity('d')
     ->setTransition('a', 'b')
     ->setTransition('a', 'c')
     ->setTransition('b', 'd')
     ->setTransition('c', 'd')
-    ->addListener('a', 'b', function (EventInstance $eventInstance) {
+    ->addListener('a', 'b', function (Event $eventInstance) {
         $eventInstance->stopPropagation();
         echo "a -> b\n";
     })
-    ->addListener('a', 'b', function (EventInstance $eventInstance) {
+    ->addListener('a', 'b', function (Event $eventInstance) {
         echo "a -> b [ERROR]\n";
     })
-    ->addListener('b', 'd', function (EventInstance $eventInstance) {
+    ->addListener('b', 'd', function (Event $eventInstance) {
         echo "b -> d\n";
     })
-    ->addListener('a', 'c', function (EventInstance $eventInstance) {
+    ->addListener('a', 'c', function (Event $eventInstance) {
         echo "c -> d\n";
     })
-    ->addListener('c', 'd', function (EventInstance $eventInstance) {
+    ->addListener('c', 'd', function (Event $eventInstance) {
         echo "c -> d\n";
     });
 
@@ -68,10 +68,10 @@ $process = new LazyArrayProcess(array(
   'key' => 'sample-process',
   'name' => "Sample process",
   'activities' => array(
-    'a' => "A",
-    'b' => "B",
-    'c' => "C",
-    'd' => "D",
+    'a' => "a",
+    'b' => "b",
+    'c' => "c",
+    'd' => "d",
   ),
   'transitions' => array(
     'a' => array('b', 'c'),
@@ -81,20 +81,20 @@ $process = new LazyArrayProcess(array(
 ));
 
 $process
-    ->addListener('a', 'b', function (EventInstance $eventInstance) {
+    ->addListener('a', 'b', function (Event $eventInstance) {
         $eventInstance->stopPropagation();
         echo "a -> b\n";
     })
-    ->addListener('a', 'b', function (EventInstance $eventInstance) {
+    ->addListener('a', 'b', function (Event $eventInstance) {
         echo "a -> b [ERROR]\n";
     })
-    ->addListener('b', 'd', function (EventInstance $eventInstance) {
+    ->addListener('b', 'd', function (Event $eventInstance) {
         echo "b -> d\n";
     })
-    ->addListener('a', 'c', function (EventInstance $eventInstance) {
+    ->addListener('a', 'c', function (Event $eventInstance) {
         echo "c -> d\n";
     })
-    ->addListener('c', 'd', function (EventInstance $eventInstance) {
+    ->addListener('c', 'd', function (Event $eventInstance) {
         echo "c -> d\n";
     });
 

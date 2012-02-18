@@ -4,7 +4,7 @@ PHP Finite state machine efficient implementation based upon an incomplete
 version of the BPMN specification.
 
 The primary goal of this API is to give a simple and fast implementation of
-finite state machine, and eventually of more complexe business processes in
+finite state machine, and eventually of more complex business processes in
 order to implement such things as business objects workflow in various
 business software by providing strict invalid objects state change error control
 during runtime in order to avoid pragmatic errors and saved data inconsitency.
@@ -20,19 +20,20 @@ Here is a two step installation:
 
  * Register it to your PSR-0 autoloader, if you don't have such thing, you can
    use this non-efficient code:
-   ``` php
-   spl_autoload_register(function ($classname) {
-       $parts = explode('\\', $classname);
-       if ('BpmnFlow' === $parts[0] || 'SimpleFlow' === $parts[0]) {
-           $filename = 'PUT HERE THE LIBRARY PATH' . implode('/', $parts) . '.php';
-           if (file_exists($filename)) {
-               require_once $filename;
-               return TRUE;
-           }
-       }
-       return FALSE;
-   });
-   ```
+
+``` php
+spl_autoload_register(function ($classname) {
+    $parts = explode('\\', $classname);
+    if ('BpmnFlow' === $parts[0] || 'SimpleFlow' === $parts[0]) {
+        $filename = 'PUT HERE THE LIBRARY PATH' . implode('/', $parts) . '.php';
+        if (file_exists($filename)) {
+            require_once $filename;
+            return TRUE;
+        }
+    }
+    return FALSE;
+});
+```
 
 ## Disclaimer ##
 

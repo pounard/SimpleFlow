@@ -10,8 +10,18 @@ use SimpleFlow\Event\DefaultEvent;
  *
  * FIXME: Add listener prioritizing
  */
-class DefaultTransition extends AbstractElement implements Transition
+class DefaultTransition implements Transition
 {
+    /**
+     * @var string
+     */
+    protected $name;
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
     /**
      * @var array
      */
@@ -47,5 +57,14 @@ class DefaultTransition extends AbstractElement implements Transition
         }
 
         return $event;
+    }
+
+    /**
+     * Default constructo
+     * @param string $name
+     */
+    public function __construct($name = null)
+    {
+        $this->name = $name;
     }
 }

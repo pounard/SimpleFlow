@@ -4,8 +4,14 @@ namespace SimpleFlow\Transition;
 
 use SimpleFlow\Element;
 
-interface Transition extends Element
+interface Transition
 {
+    /**
+     * Get human readable name.
+     * @return string
+     */
+    public function getName();
+
     /**
      * Get event listeners
      * @return array Array of callable objects

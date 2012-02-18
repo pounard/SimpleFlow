@@ -1,4 +1,6 @@
+#!/usr/bin/env php
 <?php
+
 /*
  * Testing some core features, not doing any Unit Test in here, just raw sample
  * code.
@@ -35,20 +37,20 @@ $process
     ->setTransition('a', 'c')
     ->setTransition('b', 'd')
     ->setTransition('c', 'd')
-    ->addListener('a', 'b', function (Event $eventInstance) {
-        $eventInstance->stopPropagation();
+    ->addListener('a', 'b', function (Event $e) {
+        $e->stopPropagation();
         echo "a -> b\n";
     })
-    ->addListener('a', 'b', function (Event $eventInstance) {
+    ->addListener('a', 'b', function (Event $e) {
         echo "a -> b [ERROR]\n";
     })
-    ->addListener('b', 'd', function (Event $eventInstance) {
+    ->addListener('b', 'd', function (Event $e) {
         echo "b -> d\n";
     })
-    ->addListener('a', 'c', function (Event $eventInstance) {
+    ->addListener('a', 'c', function (Event $e) {
         echo "c -> d\n";
     })
-    ->addListener('c', 'd', function (Event $eventInstance) {
+    ->addListener('c', 'd', function (Event $e) {
         echo "c -> d\n";
     });
 
@@ -81,20 +83,20 @@ $process = new LazyArrayProcess(array(
 ));
 
 $process
-    ->addListener('a', 'b', function (Event $eventInstance) {
-        $eventInstance->stopPropagation();
+    ->addListener('a', 'b', function (Event $e) {
+        $e->stopPropagation();
         echo "a -> b\n";
     })
-    ->addListener('a', 'b', function (Event $eventInstance) {
+    ->addListener('a', 'b', function (Event $e) {
         echo "a -> b [ERROR]\n";
     })
-    ->addListener('b', 'd', function (Event $eventInstance) {
+    ->addListener('b', 'd', function (Event $e) {
         echo "b -> d\n";
     })
-    ->addListener('a', 'c', function (Event $eventInstance) {
+    ->addListener('a', 'c', function (Event $e) {
         echo "c -> d\n";
     })
-    ->addListener('c', 'd', function (Event $eventInstance) {
+    ->addListener('c', 'd', function (Event $e) {
         echo "c -> d\n";
     });
 

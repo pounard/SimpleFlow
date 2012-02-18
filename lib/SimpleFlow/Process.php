@@ -6,11 +6,10 @@ use BpmnFlow\Activity\Activity;
 use BpmnFlow\Element;
 
 /**
- * Read-only finite state machine process interface
- * 
- * This simple implementation does not care about transitions, they are implicit
- * and you will never manipulate BpmnFlow\Transition\Transition instances, you
- * can add listeners to state changes for controlling or listening the changes
+ * Read-only simple finite state machine process interface
+ *
+ * This simple implementation is Transition-less, only events will be attached
+ * to the activity matrix, one per possible transition
  */
 interface Process extends Element
 {
@@ -30,7 +29,22 @@ interface Process extends Element
     public function getActivities();
 
     /**
-     * Cast this container as string
+     * Does this process can proceed to the change from given activity to given
+     * activity
+     * @param scalar|Activity $from Activity object or key
+     * @param scalar|Activity $to Activity object or key
+     * @return bool
+     * @throws ElementNotFoundException If one of the activities does not exist
      */
-    public function __toString();
+    public function canTransition($from, $to);
+
+    /**
+     * Run transition from the given activity to the given activity: any
+     * attached listeners or event will be run
+     * @param scalar|Activity $from Activity object or key
+     * @param scalar|Activity $to Activity object or key
+     * @throws ElementNotFoundException If one of the activities does not exist
+     * @throws TransitionNotAllowedException If the transition is not allowed
+     */
+    public function runTransition($from, $to);
 }

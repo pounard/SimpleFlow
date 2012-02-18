@@ -25,13 +25,13 @@ Here is a two step installation:
 spl_autoload_register(function ($classname) {
     $parts = explode('\\', $classname);
     if ('BpmnFlow' === $parts[0] || 'SimpleFlow' === $parts[0]) {
-        $filename = 'PUT HERE THE LIBRARY PATH' . implode('/', $parts) . '.php';
+        $filename = sprintf('%s/lib/%s.php', 'YOUR LIB DIR PATH', implode('/', $parts));
         if (file_exists($filename)) {
             require_once $filename;
-            return TRUE;
+            return true;
         }
     }
-    return FALSE;
+    return false;
 });
 ```
 

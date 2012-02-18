@@ -14,7 +14,7 @@ class ElementAlreadyExistsException
      * @param Element $new
      * @param mixed $container Must be castable as string
      */
-    public function __construct(Element $original, Element $new = null, $container = null)
+    public function __construct(Element $original, Element $new = null, $sender = null)
     {
         /* if (isset($container)) {
             // @TODO

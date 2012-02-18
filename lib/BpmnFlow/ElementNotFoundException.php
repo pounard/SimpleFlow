@@ -1,10 +1,10 @@
 <?php
 
-namespace SimpleFlow;
+namespace BpmnFlow;
 
 class ElementNotFoundException
     extends \InvalidArgumentException
-    implements FlowException
+    implements Exception
 {
     /**
      * Default constructor

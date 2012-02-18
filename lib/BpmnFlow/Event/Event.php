@@ -45,6 +45,13 @@ interface Event extends Element
      * Add listener to this event. They will receive the raised EventInstance
      * at call time as first parameter
      * @param callable $listener
+     * @return BpmnFlow\Event\Event Chaining self reference
      */
     public function addListener($listener);
+
+    /**
+     * Create new event instance and run it over all listeners
+     * @return EventInstance Run event instance
+     */
+    public function run();
 }

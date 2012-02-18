@@ -1,13 +1,13 @@
-# BPMN Flow / SimpleFlow #
+# SimpleFlow #
 
-PHP Finite state machine efficient implementation based upon an incomplete
-version of the BPMN specification.
+PHP Finite state machine efficient implementation inspired upon some BPMN
+standard concepts and semantics.
 
 The primary goal of this API is to give a simple and fast implementation of
 finite state machine, and eventually of more complex business processes in
 order to implement such things as business objects workflow in various
-business software by providing strict invalid objects state change error control
-during runtime in order to avoid pragmatic errors and saved data inconsitency.
+software by providing strict invalid objects state change error control during
+runtime in order to avoid pragmatic errors and saved data inconsitency.
 
 ## Installation ##
 
@@ -24,7 +24,7 @@ Here is a two step installation:
 ``` php
 spl_autoload_register(function ($classname) {
     $parts = explode('\\', $classname);
-    if ('BpmnFlow' === $parts[0] || 'SimpleFlow' === $parts[0]) {
+    if ('SimpleFlow' === $parts[0]) {
         $filename = sprintf('%s/lib/%s.php', 'YOUR LIB DIR PATH', implode('/', $parts));
         if (file_exists($filename)) {
             require_once $filename;

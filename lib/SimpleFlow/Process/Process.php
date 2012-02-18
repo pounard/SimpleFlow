@@ -2,9 +2,9 @@
 
 namespace SimpleFlow\Process;
 
-use BpmnFlow\Activity\Activity;
-use BpmnFlow\Element;
-use BpmnFlow\Event\Event;
+use SimpleFlow\Activity\Activity;
+use SimpleFlow\Element;
+use SimpleFlow\Event\Event;
 
 /**
  * Read-only simple finite state machine process interface
@@ -17,14 +17,14 @@ interface Process extends Element
     /**
      * Get specific activity
      * @param scalar $key Activity key
-     * @return BpmnFlow\Activity\Activity
+     * @return Activity
      * @throws ElementNotFoundException If activity does not exist
      */
     public function getActivity($key);
 
     /**
      * Get all activities
-     * @return array Array of BpmnFlow\Activity\Activity instances keyed with
+     * @return array Array of Activity instances keyed with
      * activities keys
      */
     public function getActivities();

@@ -1,12 +1,12 @@
 <?php
 
-namespace BpmnFlow\Event;
+namespace SimpleFlow\Event;
 
-use BpmnFlow\Element;
-use BpmnFlow\Transition\Transition;
+use SimpleFlow\Element;
+use SimpleFlow\Transition\Transition;
 
 /**
- * BPMN event describing instance
+ * Event describing interface
  */
 interface Event extends Element
 {
@@ -31,7 +31,7 @@ interface Event extends Element
     /**
      * Get event transition. Event can be either the start, end or any
      * intermediate event of this transition
-     * @return Bpmn\Transition\Transition
+     * @return Transition
      */
     public function getTransition();
 
@@ -45,7 +45,7 @@ interface Event extends Element
      * Add listener to this event. They will receive the raised EventInstance
      * at call time as first parameter
      * @param callable $listener
-     * @return BpmnFlow\Event\Event Chaining self reference
+     * @return Event Chaining self reference
      */
     public function addListener($listener);
 

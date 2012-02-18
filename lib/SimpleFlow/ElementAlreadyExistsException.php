@@ -2,11 +2,11 @@
 
 namespace SimpleFlow;
 
-use BpmnFlow\Element;
+use SimpleFlow\Element;
 
 class ElementAlreadyExistsException
     extends \InvalidArgumentException
-    implements FlowException
+    implements Exception
 {
     /**
      * Default constructor
@@ -14,20 +14,24 @@ class ElementAlreadyExistsException
      * @param Element $new
      * @param mixed $container Must be castable as string
      */
-    public function __construct(Element $original, Element $new = null, $sender = null)
+    public function __construct(Element $original = null, Element $new = null, $sender = null)
     {
-        /* if (isset($container)) {
-            // @TODO
-            $message = "TODO";
-        } else { */
-            if (isset($new)) {
-                $message = sprintf("%s with key %s already exists while replacing with %s",
-                    get_class($original), $original->getKey(), get_class($new));
-            } else {
-                $message = sprintf("%s with key %s already exists",
-                    get_class($original), $original->getKey());
-            }
-        /* } */
+        if (!isset($original)) {
+            $message = "Unknown original element already exists";
+        } else {
+            /* if (isset($container)) {
+                // @TODO
+                $message = "TODO";
+            } else { */
+                if (isset($new)) {
+                    $message = sprintf("%s with key %s already exists while replacing with %s",
+                        get_class($original), $original->getKey(), get_class($new));
+                } else {
+                    $message = sprintf("%s with key %s already exists",
+                        get_class($original), $original->getKey());
+                }
+            /* } */
+        }
 
         parent::__construct($message);
     }

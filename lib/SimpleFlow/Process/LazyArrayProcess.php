@@ -2,14 +2,18 @@
 
 namespace SimpleFlow\Process;
 
-use BpmnFlow\Activity\Activity;
-use BpmnFlow\Activity\DefaultActivity;
-use BpmnFlow\AbstractElement;
-use BpmnFlow\ElementNotFoundException;
+use SimpleFlow\Activity\Activity;
+use SimpleFlow\Activity\DefaultActivity;
+use SimpleFlow\AbstractElement;
+use SimpleFlow\ElementNotFoundException;
 
 /**
  * Read-only process implementation based upon a definition array which lazy
  * loads any piece of data on demand when needed
+ *
+ * In order to load it correctly, an internal array format is defined therefore
+ * allowing us to provide reader and writers interfaces, as well as a base
+ * implementation for those, masking this internal format
  */
 class LazyArrayProcess extends AbstractArrayProcess implements Process
 {
@@ -40,14 +44,12 @@ class LazyArrayProcess extends AbstractArrayProcess implements Process
 
     /**
      * Default constructor
-     * @param scalar $key
-     * @param array $activities
-     * @param array $activityMatrix
-     * @param string $name
+     * @param array $definition
      * @param bool $doCheck = true
      */
-    public function __construct($key, array $activities, array $activityMatrix, $name = null, $doCheck = true)
+    public function __construct(array $definition, $doCheck = true)
     {
+        /*
         $this->activities = $activities;
         $this->activitySparseMatrix = $activityMatrix;
 
@@ -65,5 +67,8 @@ class LazyArrayProcess extends AbstractArrayProcess implements Process
                 }
             }
         }
+         */
+
+        throw new \RuntimeException("Not implemented");
     }
 }

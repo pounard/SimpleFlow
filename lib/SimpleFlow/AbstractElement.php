@@ -1,6 +1,6 @@
 <?php
 
-namespace BpmnFlow;
+namespace SimpleFlow;
 
 abstract class AbstractElement implements Element
 {

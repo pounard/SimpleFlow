@@ -1,10 +1,10 @@
 <?php
 
-namespace BpmnFlow\Event;
+namespace SimpleFlow\Event;
 
 /**
- * BPMN raised event instance: those objects are volatile and will exist only
- * the event duration
+ * Raised event instance: those objects are volatile and will exist only the
+ * event duration
  *
  * This class is only a data transport object, no business to be done in here
  */

@@ -2,12 +2,12 @@
 
 namespace SimpleFlow\Process;
 
-use BpmnFlow\AbstractElement;
-use BpmnFlow\Activity\Activity;
-use BpmnFlow\ElementAlreadyExistsException;
-use BpmnFlow\ElementNotFoundException;
-use BpmnFlow\Event\DefaultEvent;
-use BpmnFlow\Event\Event;
+use SimpleFlow\AbstractElement;
+use SimpleFlow\Activity\Activity;
+use SimpleFlow\ElementAlreadyExistsException;
+use SimpleFlow\ElementNotFoundException;
+use SimpleFlow\Event\DefaultEvent;
+use SimpleFlow\Event\Event;
 
 /**
  * In memory read-write process implementation based upon straight-forward PHP

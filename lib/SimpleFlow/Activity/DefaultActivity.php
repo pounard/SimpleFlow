@@ -1,8 +1,8 @@
 <?php
 
-namespace BpmnFlow\Activity;
+namespace SimpleFlow\Activity;
 
-use BpmnFlow\AbstractElement;
+use SimpleFlow\AbstractElement;
 
 /**
  * Default in memory implementation of the Activity interface

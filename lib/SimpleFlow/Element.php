@@ -1,9 +1,9 @@
 <?php
 
-namespace BpmnFlow;
+namespace SimpleFlow;
 
 /**
- * Top-level BPMN element.
+ * Top-level element.
  */
 interface Element
 {

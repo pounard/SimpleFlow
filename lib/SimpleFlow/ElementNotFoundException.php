@@ -4,7 +4,7 @@ namespace SimpleFlow;
 
 class ElementNotFoundException
     extends \InvalidArgumentException
-    implements FlowException
+    implements Exception
 {
     /**
      * Default constructor

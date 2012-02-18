@@ -1,10 +1,10 @@
 <?php
 
-namespace BpmnFlow\Event;
+namespace SimpleFlow\Event;
 
-use BpmnFlow\AbstractElement;
-use BpmnFlow\ElementNotFoundException;
-use BpmnFlow\Transition\Transition;
+use SimpleFlow\AbstractElement;
+use SimpleFlow\ElementNotFoundException;
+use SimpleFlow\Transition\Transition;
 
 /**
  * Default in memory event implementation
@@ -24,7 +24,7 @@ class DefaultEvent extends AbstractElement implements Event
     protected $isFinal = false;
 
     /**
-     * @var BpmnFlow\Transition\Transition
+     * @var Transition
      */
     protected $transition;
 

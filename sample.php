@@ -4,15 +4,15 @@
  * code.
  */
 
-use BpmnFlow\Activity\DefaultActivity;
-use BpmnFlow\Event\EventInstance;
-
-use SimpleFlow\ArrayProcess;
-use SimpleFlow\TransitionNotAllowedException;
+use SimpleFlow\Activity\DefaultActivity;
+use SimpleFlow\Event\EventInstance;
+use SimpleFlow\Process\ArrayProcess;
+use SimpleFlow\Process\LazyArrayProcess;
+use SimpleFlow\Process\TransitionNotAllowedException;
 
 spl_autoload_register(function ($classname) {
     $parts = explode('\\', $classname);
-    if ('BpmnFlow' === $parts[0] || 'SimpleFlow' === $parts[0]) {
+    if ('SimpleFlow' === $parts[0]) {
         $filename = sprintf('%s/lib/%s.php', __DIR__, implode('/', $parts));
         if (file_exists($filename)) {
             require_once $filename;
@@ -21,6 +21,8 @@ spl_autoload_register(function ($classname) {
     }
     return false;
 });
+
+echo "ArrayProcess base implementation usage:\n";
 
 $process = new ArrayProcess("sample-process", "Sample process");
 
@@ -32,37 +34,23 @@ $process
     ->setTransition('a', 'b')
     ->setTransition('a', 'c')
     ->setTransition('b', 'd')
-    ->setTransition('c', 'd');
-
-$process
-    ->getEvent('a', 'b')
-    ->addListener(function (EventInstance $eventInstance) {
+    ->setTransition('c', 'd')
+    ->addListener('a', 'b', function (EventInstance $eventInstance) {
         $eventInstance->stopPropagation();
         echo "a -> b\n";
     })
-    ->addListener(function (EventInstance $eventInstance) {
+    ->addListener('a', 'b', function (EventInstance $eventInstance) {
         echo "a -> b [ERROR]\n";
-    });
-
-$process
-    ->getEvent('b', 'd')
-    ->addListener(function (EventInstance $eventInstance) {
+    })
+    ->addListener('b', 'd', function (EventInstance $eventInstance) {
         echo "b -> d\n";
-    });
-
-$process
-    ->getEvent('a', 'c')
-    ->addListener(function (EventInstance $eventInstance) {
+    })
+    ->addListener('a', 'c', function (EventInstance $eventInstance) {
+        echo "c -> d\n";
+    })
+    ->addListener('c', 'd', function (EventInstance $eventInstance) {
         echo "c -> d\n";
     });
-
-$process
-    ->getEvent('c', 'd')
-    ->addListener(function (EventInstance $eventInstance) {
-        echo "c -> d\n";
-    });
-
-// print_r($process);die();
 
 try {
     $process->runTransition('a', 'd');
@@ -74,3 +62,48 @@ try {
 $process->runTransition('a', 'b');
 $process->runTransition('b', 'd');
 
+echo "LazyArrayProcess base implementation usage:\n";
+
+$process = new LazyArrayProcess(array(
+  'key' => 'sample-process',
+  'name' => "Sample process",
+  'activities' => array(
+    'a' => "A",
+    'b' => "B",
+    'c' => "C",
+    'd' => "D",
+  ),
+  'transitions' => array(
+    'a' => array('b', 'c'),
+    'b' => array('d'),
+    'c' => array('d'),
+  ),
+));
+
+$process
+    ->addListener('a', 'b', function (EventInstance $eventInstance) {
+        $eventInstance->stopPropagation();
+        echo "a -> b\n";
+    })
+    ->addListener('a', 'b', function (EventInstance $eventInstance) {
+        echo "a -> b [ERROR]\n";
+    })
+    ->addListener('b', 'd', function (EventInstance $eventInstance) {
+        echo "b -> d\n";
+    })
+    ->addListener('a', 'c', function (EventInstance $eventInstance) {
+        echo "c -> d\n";
+    })
+    ->addListener('c', 'd', function (EventInstance $eventInstance) {
+        echo "c -> d\n";
+    });
+
+try {
+    $process->runTransition('a', 'd');
+    echo "Could proceed to a -> d [ERRRO]\n";
+} catch (TransitionNotAllowedException $e) {
+    echo "Cannot proceed to a -> d\n";
+}
+
+$process->runTransition('a', 'b');
+$process->runTransition('b', 'd');

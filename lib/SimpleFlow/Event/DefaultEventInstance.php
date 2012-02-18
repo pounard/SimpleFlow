@@ -1,6 +1,6 @@
 <?php
 
-namespace BpmnFlow\Event;
+namespace SimpleFlow\Event;
 
 /**
  * Default in memory implementation
@@ -8,7 +8,7 @@ namespace BpmnFlow\Event;
 class DefaultEventInstance implements EventInstance
 {
     /**
-     * @var BpmnFlow\Event\Event
+     * @var Event
      */
     protected $event;
 

@@ -2,10 +2,10 @@
 
 namespace SimpleFlow\Process;
 
-use BpmnFlow\Activity\Activity;
-use BpmnFlow\ElementAlreadyExistsException;
-use BpmnFlow\ElementNotFoundException;
-use BpmnFlow\Event\Event;
+use SimpleFlow\Activity\Activity;
+use SimpleFlow\ElementAlreadyExistsException;
+use SimpleFlow\ElementNotFoundException;
+use SimpleFlow\Event\Event;
 
 /**
  * Writable finite state machine process interface.

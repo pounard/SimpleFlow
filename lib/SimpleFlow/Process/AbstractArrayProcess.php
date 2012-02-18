@@ -2,11 +2,11 @@
 
 namespace SimpleFlow\Process;
 
-use BpmnFlow\AbstractElement;
-use BpmnFlow\Activity\Activity;
-use BpmnFlow\ElementNotFoundException;
-use BpmnFlow\Event\DefaultEvent;
-use BpmnFlow\Event\Event;
+use SimpleFlow\AbstractElement;
+use SimpleFlow\Activity\Activity;
+use SimpleFlow\ElementNotFoundException;
+use SimpleFlow\Event\DefaultEvent;
+use SimpleFlow\Event\Event;
 
 /**
  * In memory read-only process implementation based upon straight-forward PHP

@@ -2,8 +2,7 @@
 
 namespace SimpleFlow\Process;
 
-use BpmnFlow\Activity\Activity;
-
+use SimpleFlow\Activity\Activity;
 use SimpleFlow\Exception;
 
 class TransitionNotAllowedException

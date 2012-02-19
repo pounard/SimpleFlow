@@ -79,6 +79,22 @@ spl_autoload_register(function ($classname) {
 You're good to go. Start by reading the ```sample.php``` file to see a simple
 API usage.
 
+## Roadmap ##
+
+ * Support basic ```ProcessProvider``` interface for custom process persistence.
+
+ * Support ```Activity``` can be sub-processes.
+
+ * Add sub-processes lazy load throught void ```ActivityStub``` concrete
+   implementation, able to use the parent ```Process``` set
+   ```ProcessProvider``` instance.
+
+ * Add generic events to allow external system to attach listeners when a
+   sub-process is being loaded.
+
+ * Support runtime sub-processing unloading when ```ProcessInstance``` instances
+   get out the sub-process scope.
+
 ## Disclaimer ##
 
 The goal may be ambitious, this is not guaranted it will reach it, this is at

@@ -2,7 +2,6 @@
 
 namespace SimpleFlow\Process;
 
-use SimpleFlow\Activity\Activity;
 use SimpleFlow\ElementAlreadyExistsException;
 use SimpleFlow\ElementNotFoundException;
 use SimpleFlow\Transition\Transition;

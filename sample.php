@@ -8,8 +8,8 @@
 
 use SimpleFlow\Activity\DefaultActivity;
 use SimpleFlow\Event\Event;
-use SimpleFlow\Process\ArrayProcess;
-use SimpleFlow\Process\LazyArrayProcess;
+use SimpleFlow\Process\DefaultProcessInstance;
+use SimpleFlow\Process\WritableArrayProcess;
 use SimpleFlow\Process\TransitionNotAllowedException;
 
 spl_autoload_register(function ($classname) {
@@ -26,7 +26,7 @@ spl_autoload_register(function ($classname) {
 
 echo "ArrayProcess base implementation usage:\n";
 
-$process = new ArrayProcess("sample-process", "Sample process");
+$process = new WritableArrayProcess("sample-process", "Sample process");
 
 $process
     ->addActivity('a')
@@ -36,7 +36,11 @@ $process
     ->setTransition('a', 'b')
     ->setTransition('a', 'c')
     ->setTransition('b', 'd')
-    ->setTransition('c', 'd')
+    ->setTransition('c', 'd');
+
+$instance = new DefaultProcessInstance($process, 'a');
+$instance
+    ->getProcess()
     ->addListener('a', 'b', function (Event $e) {
         $e->stopPropagation();
         echo "a -> b\n";
@@ -55,57 +59,11 @@ $process
     });
 
 try {
-    $process->runTransition('a', 'd');
-    echo "Could proceed to a -> d [ERRRO]\n";
+    $instance->transitionTo('d');
+    echo "Could proceed to a -> d [ERROR]\n";
 } catch (TransitionNotAllowedException $e) {
     echo "Cannot proceed to a -> d\n";
 }
 
-$process->runTransition('a', 'b');
-$process->runTransition('b', 'd');
-
-echo "LazyArrayProcess base implementation usage:\n";
-
-$process = new LazyArrayProcess(array(
-  'key' => 'sample-process',
-  'name' => "Sample process",
-  'activities' => array(
-    'a' => "a",
-    'b' => "b",
-    'c' => "c",
-    'd' => "d",
-  ),
-  'transitions' => array(
-    'a' => array('b', 'c'),
-    'b' => array('d'),
-    'c' => array('d'),
-  ),
-));
-
-$process
-    ->addListener('a', 'b', function (Event $e) {
-        $e->stopPropagation();
-        echo "a -> b\n";
-    })
-    ->addListener('a', 'b', function (Event $e) {
-        echo "a -> b [ERROR]\n";
-    })
-    ->addListener('b', 'd', function (Event $e) {
-        echo "b -> d\n";
-    })
-    ->addListener('a', 'c', function (Event $e) {
-        echo "c -> d\n";
-    })
-    ->addListener('c', 'd', function (Event $e) {
-        echo "c -> d\n";
-    });
-
-try {
-    $process->runTransition('a', 'd');
-    echo "Could proceed to a -> d [ERRRO]\n";
-} catch (TransitionNotAllowedException $e) {
-    echo "Cannot proceed to a -> d\n";
-}
-
-$process->runTransition('a', 'b');
-$process->runTransition('b', 'd');
+$instance->transitionTo('b');
+$instance->transitionTo('d');

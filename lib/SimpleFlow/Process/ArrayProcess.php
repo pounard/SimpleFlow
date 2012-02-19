@@ -5,51 +5,67 @@ namespace SimpleFlow\Process;
 use SimpleFlow\AbstractElement;
 use SimpleFlow\Activity\Activity;
 use SimpleFlow\Activity\DefaultActivity;
-use SimpleFlow\ElementAlreadyExistsException;
 use SimpleFlow\ElementNotFoundException;
+use SimpleFlow\Event\Event;
+use SimpleFlow\Transition\DefaultTransition;
 use SimpleFlow\Transition\Transition;
 
 /**
- * In memory read-write process implementation based upon straight-forward PHP
+ * In memory read-only process implementation based upon straight-forward PHP
  * array activities sparse matrix
  */
-class ArrayProcess extends AbstractArrayProcess implements WritableProcess
+abstract class ArrayProcess extends AbstractElement implements Process
 {
-    public function isLocked()
-    {
-        return $this->locked;
-    }
+    /**
+     * Finite state machine represented as an activities sparse matrix.
+     * @var array
+     */
+    protected $activitySparseMatrix = array();
 
-    public function lock()
-    {
-        $this->locked = true;
+    /**
+     * Actitives map based upon their keys
+     * @var array
+     */
+    protected $activities = array();
 
-        return $this;
-    }
+    /**
+     * @var bool
+     */
+    protected $locked = false;
 
-    public function addActivity($key, $name = null, $replace = false)
+    public function getActivity($key)
     {
-        if ($this->isLocked()) {
-            throw new ProcessLockedException($this);
+        if (!isset($this->activities[$key])) {
+            throw new ElementNotFoundException($key, $this);
         }
 
-        if (!$replace && isset($this->activities[$key])) {
-            throw new ElementAlreadyExistsException($this->activities[$key], $activity, $this);
+        if (!$this->activities[$key] instanceof Activity) {
+            if (is_string($this->activities[$key])) {
+                $this->activities[$key] = new DefaultActivity($key, $this->activities[$key]);
+            } else {
+                $this->activities[$key] = new DefaultActivity($key);
+            }
         }
 
-        $this->activities[$key] = new DefaultActivity($key, $name);
-
-        return $this;
+        return $this->activities[$key];
     }
 
-    public function setTransition($from, $to, Transition $transition = null)
+    public function getActivities()
     {
-        if ($this->isLocked()) {
-            throw new ProcessLockedException($this);
+        // Force all activities to be built
+        foreach ($this->activities as $key => $activity) {
+            if (!$activity instanceof Activity) {
+                $this->getActivity($key);
+            }
         }
 
-        if ($this->canTransition($from, $to)) {
-            throw new ElementAlreadyExistsException();
+        return $this->activities;
+    }
+
+    public function getTransition($from, $to)
+    {
+        if (!$this->canTransition($from, $to)) {
+            throw new TransitionNotAllowedException($from, $to, $this);
         }
 
         if ($from instanceof Activity) {
@@ -59,12 +75,87 @@ class ArrayProcess extends AbstractArrayProcess implements WritableProcess
             $to = $to->getKey();
         }
 
-        if (!isset($transition)) {
-            $transition = true;
+        $transition = $this->activitySparseMatrix[$from][$to];
+
+        if (!$transition instanceof Transition) {
+            $key = $from . '-' . $to;
+            $transition = $this->activitySparseMatrix[$from][$to] = new DefaultTransition($key);
         }
 
-        $this->activitySparseMatrix[$from][$to] = $transition;
+        return $transition;
+    }
+
+    public function addListener($from, $to, $listener)
+    {
+        $this->getTransition($from, $to)->addListener($listener);
 
         return $this;
+    }
+
+    public function getTransitionsFrom($from)
+    {
+        if ($from instanceof Activity) {
+            $from = $from->getKey();
+        }
+
+        if (!isset($this->activities[$from])) {
+            throw new ElementNotFoundException($from, $this);
+        }
+
+        $ret = array();
+
+        if (isset($this->activitySparseMatrix[$from])) {
+            foreach ($this->activitySparseMatrix[$from] as $to => $transition) {
+                $ret[] = '';
+            }
+        }
+
+        return $ret;
+    }
+
+    public function canTransition($from, $to)
+    {
+        if ($from instanceof Activity) {
+            $from = $from->getKey();
+        }
+        if ($to instanceof Activity) {
+            $to = $to->getKey();
+        }
+
+        if (!isset($this->activities[$from])) {
+            throw new ElementNotFoundException($from, $this);
+        }
+        if (!isset($this->activities[$to])) {
+            throw new ElementNotFoundException($to, $this);
+        }
+
+        return isset($this->activitySparseMatrix[$from][$to]);
+    }
+
+    public function runTransition($from, $to, ProcessInstance $instance)
+    {
+        if (!$this->canTransition($from, $to)) {
+            throw new TransitionNotAllowedException($from, $to, $this);
+        }
+
+        if ($from instanceof Activity) {
+            $from = $from->getKey();
+        }
+        if ($to instanceof Activity) {
+            $to = $to->getKey();
+        }
+
+        $transition = $this->activitySparseMatrix[$from][$to];
+
+        if ($transition instanceof Transition) {
+
+            $event = $transition->run();
+
+            if ($event->hasBeenCanceled()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

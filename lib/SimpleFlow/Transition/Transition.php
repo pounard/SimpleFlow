@@ -2,8 +2,6 @@
 
 namespace SimpleFlow\Transition;
 
-use SimpleFlow\Element;
-
 interface Transition
 {
     /**
@@ -28,7 +26,8 @@ interface Transition
 
     /**
      * Create new event instance and run it over all listeners
+     * @param ProcessInstance $instance Instance on which the transition is run
      * @return Event Run event instance
      */
-    public function run();
+    public function run(ProcessInstance $instance = null);
 }

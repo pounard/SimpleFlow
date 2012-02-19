@@ -70,8 +70,9 @@ interface Process extends Element
      * attached listeners or transition will be run
      * @param scalar|Activity $from Activity object or key
      * @param scalar|Activity $to Activity object or key
+     * @param ProcessInstance $instance Object on which the process is run upon
      * @throws ElementNotFoundException If one of the activities does not exist
      * @throws TransitionNotAllowedException If the transition is not allowed
      */
-    public function runTransition($from, $to);
+    public function runTransition($from, $to, ProcessInstance $instance);
 }

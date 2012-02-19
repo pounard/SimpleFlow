@@ -2,8 +2,7 @@
 
 namespace SimpleFlow\Transition;
 
-use SimpleFlow\AbstractElement;
-use SimpleFlow\Event\DefaultEvent;
+use SimpleFlow\Event\Event;
 
 /**
  * Default in memory event implementation
@@ -43,9 +42,9 @@ class DefaultTransition implements Transition
         return $this;
     }
 
-    public function run()
+    public function run(ProcessInstance $instance = null)
     {
-        $event = new DefaultEvent($this);
+        $event = new Event($this, $instance);
 
         foreach ($this->listeners as $listener) {
 

@@ -11,11 +11,11 @@ runtime in order to avoid pragmatic errors and saved data inconsitency.
 
 ## Capabilities ##
 
-# Elements #
+### Elements ###
 
 ```Element``` is the top level interface
 
-# Process and Event API #
+### Process and Event API ###
 
 Current API is unstable and changing, but right now it is able to:
 

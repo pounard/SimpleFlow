@@ -13,7 +13,8 @@ runtime in order to avoid pragmatic errors and saved data inconsitency.
 
 ### Elements ###
 
-```Element``` is the top level interface
+```Element``` is the top level interface of objects that can be named and
+manipulated. Not every object implements this interface.
 
 ### Process and Event API ###
 
@@ -36,6 +37,18 @@ Current API is unstable and changing, but right now it is able to:
    event based design. Listener ```callable``` objects that can accept an
    ```Event``` as first parameter: ```Event``` instance allows listeners to
    drill-down to the ```ProcessInstance``` on which it is being run upon.
+
+### Additional notes ###
+
+Listeners and ```ProcessInstance``` objects are runtime and business matter:
+this API does not handle their serialization. It provides a default process
+instance implementation for testing only.
+
+```Transition``` instance are not persisting objects in that regard: their only
+goal is to aggregate runtime events. The possible transitions are defined by the
+```Process``` interface as discrete objects the developer cannot manipulate
+throught the given interfaces. They still can be named when pragmatically
+defined in the ```WritableProcess``` interface.
 
 ## Installation ##
 
@@ -62,6 +75,9 @@ spl_autoload_register(function ($classname) {
     return false;
 });
 ```
+
+You're good to go. Start by reading the ```sample.php``` file to see a simple
+API usage.
 
 ## Disclaimer ##
 

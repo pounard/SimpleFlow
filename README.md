@@ -44,9 +44,9 @@ Listeners and ```ProcessInstance``` objects are runtime and business matter:
 this API does not handle their serialization. It provides a default process
 instance implementation for testing only.
 
-```Transition``` instance are not persisting objects in that regard: their only
-goal is to aggregate runtime events. The possible transitions are defined by the
-```Process``` interface as discrete objects the developer cannot manipulate
+```Transition``` instances are not persisting objects in that regard: their only
+goal is to aggregate runtime listeners. The possible transitions are defined by
+the ```Process``` interface as discrete objects the developer cannot manipulate
 throught the given interfaces. They still can be named when pragmatically
 defined in the ```WritableProcess``` interface.
 

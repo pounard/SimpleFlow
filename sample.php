@@ -38,6 +38,10 @@ $process
     ->setTransition('b', 'd')
     ->setTransition('c', 'd');
 
+// Serializing and deserializing for fun.
+$data = serialize($process);
+$process = unserialize($data);
+
 $instance = new DefaultProcessInstance($process, 'a');
 $instance
     ->getProcess()

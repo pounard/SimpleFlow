@@ -13,8 +13,11 @@ use SimpleFlow\Transition\Transition;
 /**
  * In memory read-only process implementation based upon straight-forward PHP
  * array activities sparse matrix
+ *
+ * Serializing this object will loose listeners, listeners are runtime objects
+ * and not definition objects
  */
-abstract class ArrayProcess extends AbstractElement implements Process
+abstract class ArrayProcess extends AbstractElement implements Process, \Serializable
 {
     /**
      * Finite state machine represented as an activities sparse matrix.
@@ -157,5 +160,59 @@ abstract class ArrayProcess extends AbstractElement implements Process
         }
 
         return true;
+    }
+
+    public function serialize()
+    {
+        $data = array();
+
+        $data['k'] = $this->key;
+
+        if ($this->name !== $this->key) {
+            $data['n'] = $this->name;
+        }
+
+        foreach ($this->activities as $from => $activity) {
+
+            if ($activity instanceof Activity) {
+                $data['a'][$from] = $activity->getName();
+            } else {
+                $data['a'][$from] = $activity;
+            }
+
+            if (isset($this->activitySparseMatrix[$from])) {
+                foreach ($this->activitySparseMatrix[$from] as $to => $transition) {
+
+                    if ($transition instanceof Transition) {
+                        $data['m'][$from][$to] = $transition->getName();
+                    } else {
+                        $data['m'][$from][$to] = true;
+                    }
+                }
+            }
+        }
+
+        return serialize($data);
+    }
+
+    public function unserialize($serialized)
+    {
+        $data = unserialize($serialized);
+
+        $this->key = $data['k'];
+
+        if (isset($data['n'])) {
+            $this->name = $data['n'];
+        } else {
+            $this->name = $this->key;
+        }
+
+        if (isset($data['a'])) {
+            $this->activities = $data['a'];
+        }
+
+        if (isset($data['m'])) {
+            $this->activitySparseMatrix = $data['m'];
+        }
     }
 }

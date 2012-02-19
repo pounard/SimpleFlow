@@ -9,6 +9,34 @@ order to implement such things as business objects workflow in various
 software by providing strict invalid objects state change error control during
 runtime in order to avoid pragmatic errors and saved data inconsitency.
 
+## Capabilities ##
+
+# Elements #
+
+```Element``` is the top level interface
+
+# Process and Event API #
+
+Current API is unstable and changing, but right now it is able to:
+
+ * Define ```Process``` objects, a process is a finite state maching with states
+   refered as ```Activity``` and possible transitions between states implemented
+   as a basic sparse matrix in the array based implementation.
+
+ * Define ```ProcessInstance``` objects, a process instance is a stateful
+   business object that has a current state in a given process.
+
+ * Default process array based implementation can be serialized.
+
+ * Define listeners upon process transitions: listeners are a runtime matter and
+   don't get serialized with the ```Process``` instance. Listeners are instances
+   of ```callable``` which makes the system quite flexible.
+
+ * Run ```Transition``` on ```ProcessInstance``` objects using an listener and
+   event based design. Listener ```callable``` objects that can accept an
+   ```Event``` as first parameter: ```Event``` instance allows listeners to
+   drill-down to the ```ProcessInstance``` on which it is being run upon.
+
 ## Installation ##
 
 This library requires PHP 5.3 or higher. This code is PSR-0 code and in order to
